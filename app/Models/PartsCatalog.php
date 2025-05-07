@@ -12,6 +12,7 @@ class PartsCatalog extends Model
 
     protected $fillable = [
         'vehicle',
+        'vehicle_id',
         'title',
         'description',
         'file_path',

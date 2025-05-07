@@ -31,16 +31,16 @@
             <div class="mb-5">
                 <flux:field>
                     <flux:label>Vehículo</flux:label>
-                    <flux:select name="vehicle" placeholder="Seleccione la serie...">
+                    <flux:select name="vehicle_id" placeholder="Seleccione la serie...">
                         @foreach ($vehicles as $vehicle)
-                            @if ( old('vehicle') == $vehicle->name )
-                                <flux:select.option value="{{ old('vehicle')}}" selected>{{$vehicle->name}}</flux:select.option>
+                            @if ( old('vehicle_id') == $vehicle->id )
+                                <flux:select.option value="{{ old('vehicle_id')}}" selected>{{$vehicle->name}}</flux:select.option>
                             @else
-                                <flux:select.option value="{{ $vehicle->name }}">{{$vehicle->name}}</flux:select.option>
+                                <flux:select.option value="{{ $vehicle->id }}">{{$vehicle->name}}</flux:select.option>
                             @endif)
                         @endforeach
                     </flux:select>
-                    <flux:error name="vehicle" />
+                    <flux:error name="vehicle_id" />
                 </flux:field>
             </div>
             <div class="mb-5">

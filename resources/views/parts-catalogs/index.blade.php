@@ -36,7 +36,7 @@
                 <tr>
                     <td class="px-4 py-3 font-bold">{{$catalog->title}}</td>
                     <td class="px-4 py-3">{{$catalog->description}}</td>
-                    <td class="px-4 py-3">{{$catalog->vehicle}}</td>
+                    <td class="px-4 py-3">{{$catalog->vehicle_id}}</td>
                     <td class="px-4 py-3"><a href="{{Storage::url($catalog->file_path)}}" target="blank">Ver archivo</a></td>
                     {{-- @if ( auth()->user()->role >= 89 )
                         <td class="px-4 py-3"><flux:button href="{{route('vehicles.edit', $vehicle->id)}}" icon="pencil-square" size="sm"></flux:button></td>

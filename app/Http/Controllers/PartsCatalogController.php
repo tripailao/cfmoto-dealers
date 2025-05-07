@@ -39,7 +39,7 @@ class PartsCatalogController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'vehicle' => 'required',
+            'vehicle_id' => 'required',
             'file' => 'required|extensions:pdf,xlsx',
         ]);
 

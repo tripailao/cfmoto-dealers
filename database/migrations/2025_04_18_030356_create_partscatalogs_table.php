@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('parts_catalogs', function (Blueprint $table) {
             $table->id();
-            $table->string('vehicle');
+            $table->string('vehicle_id');
+            //$table->foreignId('vehicle_id')
+                //->constrained()
+                //->onDelete('cascade')
+                //->onUpdate('cascade');
             $table->string('title');
             $table->string('description');
             $table->string('file_path');

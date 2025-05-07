@@ -36,7 +36,8 @@
                 @if ( auth()->user()->role >= 69 )
                     <flux:navlist.item icon="circle-stack" href="{{route('vehicles.index')}}">Vehículos</flux:navlist.item>
                     <flux:navlist.item icon="building-storefront" href="{{route('dealers.index')}}">Dealers</flux:navlist.item>
-                    <flux:navlist.item icon="puzzle-piece" href="{{route('parts-catalogs.index')}}">Partes</flux:navlist.item>
+                    <flux:navlist.item icon="exclamation-triangle" href="{{route('dealers.index')}}">Alertas de Seguridad</flux:navlist.item>
+                    <flux:navlist.item icon="puzzle-piece" href="{{route('parts-catalogs.index')}}">Catálogos de Partes</flux:navlist.item>
                 @endif
 
                 @foreach ( $groups as $group => $links)

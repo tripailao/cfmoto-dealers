@@ -42,8 +42,9 @@ Route::middleware(['auth'])->controller(VehicleController::class)->group(functio
     Route::get('/vehicles', 'index')->name('vehicles.index');
     Route::get('/vehicles/create', 'create')->name('vehicles.create');
     Route::post('/vehicles', 'store')->name('vehicles.store');
-    Route::get('/vehicles/{dealer}/edit', 'edit')->name('vehicles.edit');
-    Route::put('/vehicles/{dealer}', 'update')->name('vehicles.update');
+    Route::get('/vehicles/{vehicle}/edit', 'edit')->name('vehicles.edit');
+    Route::put('/vehicles/{vehicle}', 'update')->name('vehicles.update');
+    Route::get('/vehicles/{vehicle}', 'show')->name('vehicles.show');
 });
 
 Route::middleware(['auth'])->controller(PartsCatalogController::class)->group(function () {

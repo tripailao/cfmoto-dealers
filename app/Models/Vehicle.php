@@ -17,6 +17,7 @@ class Vehicle extends Model
         'serie_name',
         'serie_id',
         'year',
+        'image_path',
     ];
 
     /**

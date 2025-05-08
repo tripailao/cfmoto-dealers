@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class VehicleController extends Controller
 {
@@ -14,12 +15,7 @@ class VehicleController extends Controller
     public function index()
     {
         //
-
-        //$find = Vehicle::find(1);
-        //return $find->serie;
-
-        $data = Vehicle::all();
-        //$serie = DB::table('series')->
+        $data = Vehicle::orderBy('id', 'DESC')->get();
         return view('vehicles.index', ['vehicles' => $data]);
     }
 
@@ -44,10 +40,15 @@ class VehicleController extends Controller
             'code' => 'required|max:255',
             'serie_id' => 'required|max:255',
             'year' => 'required|integer|max_digits:4',
+            'image' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
         ]);
 
         $serieId = $data['serie_id'];
         $serieName = DB::table('series')->where('id', $serieId)->first();
+
+        if($request->hasFile('image')){
+            $data['image'] = Storage::disk('hidden')->put('hidden', $request->image);
+        }
 
         Vehicle::create([
             'name' => $data['name'],
@@ -55,6 +56,7 @@ class VehicleController extends Controller
             'serie_name' => $serieName->name,
             'serie_id' => $data['serie_id'],
             'year' => $data['year'],
+            'image_path' => $data['image'],
         ]);
 
         session()->flash('swal',[
@@ -97,5 +99,14 @@ class VehicleController extends Controller
     public function destroy(Vehicle $vehicle)
     {
         //
+    }
+
+    public function search(){
+        $search_text = $_GET['vehicle'];
+        $vehicles = Vehicle::where('name', 'LIKE', '%' . $search_text . '%')
+                            ->orWhere('code', 'LIKE', '%' . $search_text . '%')
+                            ->orWhere('year', 'LIKE', '%' . $search_text . '%')->get();
+
+        return view('vehicles.search', compact('vehicles'));
     }
 }

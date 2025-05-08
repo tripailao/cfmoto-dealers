@@ -21,6 +21,7 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->integer('year');
+            $table->string('image_path');
             $table->timestamps();
         });
     }

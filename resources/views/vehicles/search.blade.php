@@ -19,12 +19,12 @@
         </div>
 
         <div class="bg-gray-100 p-4 rounded-lg">
-        <form action="{{ url('/search')}}" type="get">
-            <flux:field>
-                <flux:input icon="magnifying-glass" type="search" name="vehicle" placeholder="Buscar por modelo, codigo o año" />
-            </flux:field>
-        </form>
-        </div>
+            <form action="{{ url('/search')}}" type="get">
+                <flux:field>
+                    <flux:input icon="magnifying-glass" type="search" name="vehicle" placeholder="Buscar por modelo, codigo o año" />
+                </flux:field>
+            </form>
+            </div>
 
         <div class="border border-gray-100 rounded-lg shadow-xl">
         <table class="table table-auto w-full text-left ">

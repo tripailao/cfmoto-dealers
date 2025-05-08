@@ -24,6 +24,8 @@ Route::get('dashboard', [DashboardController::class, 'index'],)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::get('/search', [VehicleController::class, 'search']);
+
 //Route::redirect('/', '/home');
 //Route::redirect('/dashboard', '/home');
 //Route::get('/home', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('home');

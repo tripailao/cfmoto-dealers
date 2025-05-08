@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <form method="POST" action="{{route('vehicles.store')}}">
+        <form method="POST" action="{{route('vehicles.store')}}" enctype="multipart/form-data">
         @csrf
             <div class="mb-5">
                 <flux:field>
@@ -46,8 +46,15 @@
             <div class="mb-5">
                 <flux:field>
                     <flux:label>Año</flux:label>
-                    <flux:input type="number" name="year" value="{{old('year')}}" />
+                    <flux:input type="number" name="year" value="{{old('year') ?? date('Y')}}" />
                     <flux:error name="year" />
+                </flux:field>
+            </div>
+            <div class="mb-5">
+                <flux:field>
+                    <flux:label>Imagen</flux:label>
+                    <flux:input type="file" name="image" accept="image/*" />
+                    <flux:error name="image" />
                 </flux:field>
             </div>
 

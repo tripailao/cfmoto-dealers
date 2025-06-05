@@ -47,7 +47,9 @@ class VehicleController extends Controller
         $serieName = DB::table('series')->where('id', $serieId)->first();
 
         if($request->hasFile('image')){
-            $data['image'] = Storage::disk('hidden')->put('hidden', $request->image);
+            $file_name = $data['name'] . '-' . $data['code'] . '.' . $request->file('image')->getClientOriginalExtension();
+            //$data['image'] = Storage::disk('hidden')->put('hidden', $request->image);
+            $data['image'] = Storage::disk('hidden')->putFileAs('hidden', $request->image, $file_name);
         }
 
         Vehicle::create([
@@ -75,7 +77,6 @@ class VehicleController extends Controller
     public function show(Vehicle $vehicle)
     {
         //
-        $vehicle = Vehicle::find($vehicle);
         return view('vehicles.show', compact('vehicle'));
     }
 
@@ -85,6 +86,8 @@ class VehicleController extends Controller
     public function edit(Vehicle $vehicle)
     {
         //
+        $series = DB::table('series')->get();
+        return view('vehicles.edit', compact('vehicle','series') );
     }
 
     /**
@@ -93,6 +96,23 @@ class VehicleController extends Controller
     public function update(Request $request, Vehicle $vehicle)
     {
         //
+        $data = $request->validate([
+            'name' => 'required|max:255',
+            'code' => 'required|max:255',
+            'serie_id' => 'required|max:255',
+            'year' => 'required|integer|max_digits:4',
+        ]);
+
+        $vehicle->update($data);
+
+        session()->flash('swal',[
+            'icon' => 'success',
+            'title' => 'Actualizado',
+            'text' => 'Los datos se han modificado correctamente.',
+            'confirmButtonColor' => '#198754',
+        ]);
+
+        return redirect()->route('vehicles.index');
     }
 
     /**

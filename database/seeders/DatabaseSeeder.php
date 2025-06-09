@@ -14,24 +14,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-        User::factory()->create([
-            'name' => 'Matias',
-            'email' => 'm@t.cl',
-            'password' => bcrypt('demo1234'),
-            'role' => 99,
-        ]);
-        User::factory()->create([
-
-            'name' => 'John Doe',
-            'email' => 'jdoe@gmail.com',
-            'password' => bcrypt('demo1234'),
-
-        ]);
-
         $this->call([
             DealerSeeder::class,
             SerieSeeder::class,
+            RoleSeeder::class,
+            UserSeeder::class,
         ]);
+
+        User::factory()->create([
+            'name' => 'Matias',
+            'lastname' => 'Tripailao',
+            'email' => 'm@t.cl',
+            'password' => bcrypt('demo1234'),
+        ])->assignRole('super-admin');
+
+
     }
 }

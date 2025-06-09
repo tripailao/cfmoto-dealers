@@ -6,7 +6,7 @@
                 <flux:subheading size="lg">{{ __('Listado de modelos de vehículos') }}</flux:subheading>
             </div>
             <div class="basis-1/3 text-right">
-                @if ( auth()->user()->role >= 89 )
+                @if ( auth()->user()->hasanyrole('super-admin|admin'))
                 <flux:button
                     href="{{route('vehicles.create')}}"
                     icon:trailing="plus-circle"

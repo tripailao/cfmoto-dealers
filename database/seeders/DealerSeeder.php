@@ -17,10 +17,10 @@ class DealerSeeder extends Seeder
     public function run(): void
     {
         DB::table('dealers')->insert([
-            'name' => 'Motomania',
-            'city' => 'Santiago Centro',
-            'address' => 'San Diego 180',
-            'phone' => '2224567',
+            'name' => 'CFMOTO Concepción',
+            'city' => 'Talcahuano',
+            'address' => 'Av. Jorge Alessandri 3763',
+            'phone' => '99999999',
         ]);
 
         Dealer::factory(7)->create();

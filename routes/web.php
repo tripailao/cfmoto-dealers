@@ -10,6 +10,7 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PartsCatalogController;
 use App\Http\Controllers\FilesController;
+use App\Http\Controllers\UserController;
 
 
 // Route::get('/', function () {
@@ -29,6 +30,8 @@ Route::get('/search', [VehicleController::class, 'search']);
 //Route::redirect('/', '/home');
 //Route::redirect('/dashboard', '/home');
 //Route::get('/home', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('home');
+
+Route::resource('users', UserController::class)->names('users');
 
 Route::middleware(['auth'])->controller(DealerController::class)->group(function () {
     Route::get('/dealers', 'index')->name('dealers.index');

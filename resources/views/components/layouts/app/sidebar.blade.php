@@ -32,22 +32,22 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.item icon="home" href="{{route('dashboard')}}" :current="request()->routeIs('dashboard')">Inicio</flux:navlist.item>
+                <flux:navlist.item icon="circle-stack" href="{{route('vehicles.index')}}">Vehículos</flux:navlist.item>
 
-                @if ( auth()->user()->role >= 69 )
-                    <flux:navlist.item icon="circle-stack" href="{{route('vehicles.index')}}">Vehículos</flux:navlist.item>
-                    <flux:navlist.item icon="building-storefront" href="{{route('dealers.index')}}">Dealers</flux:navlist.item>
-                    <flux:navlist.item icon="exclamation-triangle" href="{{route('dealers.index')}}">Alertas de Seguridad</flux:navlist.item>
-                    <flux:navlist.item icon="puzzle-piece" href="{{route('parts-catalogs.index')}}">Catálogos de Partes</flux:navlist.item>
+                @if ( auth()->user()->hasanyrole('super-admin|admin'))
+
                 @endif
+                <flux:navlist.item icon="exclamation-triangle" href="{{route('dealers.index')}}">Alertas de Seguridad</flux:navlist.item>
+                <flux:navlist.item icon="puzzle-piece" href="{{route('parts-catalogs.index')}}">Catálogos de Partes</flux:navlist.item>
 
-                @foreach ( $groups as $group => $links)
-                {{-- <flux:navlist.group :heading="$group" class="grid">
+                {{-- @foreach ( $groups as $group => $links)
+                <flux:navlist.group :heading="$group" class="grid">
                     @foreach ($links as $link)
                     <flux:navlist.item :icon="$link['icon']" :href="$link['url']" :current="$link['current']" wire:navigate>{{$link['name']}}</flux:navlist.item>
                     @endforeach
-                </flux:navlist.group> --}}
-                @endforeach
-                <flux:navlist.group expandable :expanded="false" heading="Partes" class="lg:grid">
+                </flux:navlist.group>
+                @endforeach--}}
+                {{-- <flux:navlist.group expandable :expanded="false" heading="Partes" class="lg:grid">
                     <flux:navlist.item href="#">NK</flux:navlist.item>
                     <flux:navlist.item href="#">SR</flux:navlist.item>
                     <flux:navlist.item href="#">MT</flux:navlist.item>
@@ -57,15 +57,23 @@
                     <flux:navlist.item href="#">ZFORCE</flux:navlist.item>
                     <flux:navlist.item href="#">YOUTH</flux:navlist.item>
                     <flux:navlist.item href="#">GOES</flux:navlist.item>
-                </flux:navlist.group>
+                </flux:navlist.group> --}}
             </flux:navlist>
             <flux:spacer />
 
             <flux:navlist variant="outline">
-                @if ( auth()->user()->role >= 69 )
-                    <flux:navlist.item icon="key" href="#">
-                    {{ __('Administración') }}
+                @if ( auth()->user()->hasanyrole('super-admin|admin'))
+                <flux:navlist.group heading="Administración" class="mt-4">
+                    <flux:navlist.item icon="users" href="{{route('users.index')}}">
+                        {{ __('Usuarios') }}
                     </flux:navlist.item>
+                    <flux:navlist.item icon="building-storefront" href="{{route('dealers.index')}}">
+                        {{ __('Dealers') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="key" href="#">
+                        {{ __('Configuración') }}
+                    </flux:navlist.item>
+                </flux:navlist.group>
                 @endif
 
                 {{-- <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
@@ -108,7 +116,7 @@
                     <flux:menu.separator />
 
                     <flux:menu.radio.group>
-                        <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                        <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Configuración') }}</flux:menu.item>
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
@@ -116,7 +124,7 @@
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
                         <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                            {{ __('Log Out') }}
+                            {{ __('Cerrar sesión') }}
                         </flux:menu.item>
                     </form>
                 </flux:menu>

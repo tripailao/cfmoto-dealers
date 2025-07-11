@@ -32,13 +32,15 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.item icon="home" href="{{route('dashboard')}}" :current="request()->routeIs('dashboard')">Inicio</flux:navlist.item>
-                <flux:navlist.item icon="circle-stack" href="{{route('vehicles.index')}}">Vehículos</flux:navlist.item>
+                <flux:navlist.item icon="circle-stack" href="{{route('vehicles.index')}}" :current="request()->routeIs('vehicles.*')">Vehículos</flux:navlist.item>
 
                 @if ( auth()->user()->hasanyrole('super-admin|admin'))
 
                 @endif
                 <flux:navlist.item icon="exclamation-triangle" href="{{route('dealers.index')}}">Alertas de Seguridad</flux:navlist.item>
-                <flux:navlist.item icon="puzzle-piece" href="{{route('parts-catalogs.index')}}">Catálogos de Partes</flux:navlist.item>
+                <flux:navlist.item icon="book-open" href="{{route('datasets.index')}}">Datasets</flux:navlist.item>
+                {{-- <flux:navlist.item icon="wrench" href="#">Manuales de Servicio</flux:navlist.item> --}}
+                <flux:navlist.item icon="lifebuoy" href="#">Activación de garantía</flux:navlist.item>
 
                 {{-- @foreach ( $groups as $group => $links)
                 <flux:navlist.group :heading="$group" class="grid">

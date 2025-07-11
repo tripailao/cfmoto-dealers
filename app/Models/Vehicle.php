@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Vehicle extends Model
@@ -16,7 +17,6 @@ class Vehicle extends Model
         'code',
         'serie_name',
         'serie_id',
-        'year',
         'image_path',
     ];
 
@@ -26,6 +26,11 @@ class Vehicle extends Model
     public function serie(): BelongsTo
     {
         return $this->belongsTo(Serie::class);
+    }
+
+    public function datasets(): HasMany
+    {
+        return $this->hasMany(Dataset::class);
     }
 
 }

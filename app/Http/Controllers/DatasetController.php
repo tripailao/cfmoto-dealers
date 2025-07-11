@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
-use App\Models\PartsCatalog;
+use App\Models\Dataset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class PartsCatalogController extends Controller
+class DatasetController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,8 @@ class PartsCatalogController extends Controller
     {
         //
         $vehicles = Vehicle::all();
-        $catalogs = PartsCatalog::all();
-        return view('parts-catalogs.index', compact('vehicles', 'catalogs'));
+        $datasets = Dataset::all();
+        return view('datasets.index', compact('vehicles', 'datasets'));
     }
 
     /**
@@ -28,7 +28,7 @@ class PartsCatalogController extends Controller
     {
         //
         $vehicles = Vehicle::all();
-        return view('parts-catalogs.create', ['vehicles' => $vehicles]);
+        return view('datasets.create', ['vehicles' => $vehicles]);
     }
 
     /**
@@ -41,23 +41,23 @@ class PartsCatalogController extends Controller
         $date = date('Ymj');
 
         $data = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
             'vehicle_id' => 'required',
-            'file' => 'required|extensions:pdf,xls,xlsx|max:15048',
+            'vehicle_year' => 'required',
+            'type_data' => 'required',
+            'file_path' => 'required|extensions:pdf,xls,xlsx|max:15048',
         ]);
 
-        if($request->hasFile('file')){
-            $file_name = 'catalogo-partes' . '-' . $vehicle->name . '-' . $vehicle->code . '-' . $date . '.' . $request->file('file')->getClientOriginalExtension();
-            $data['file'] = Storage::disk('hidden')->putFileAs('hidden', $request->file, $file_name);
+        if($request->hasFile('file_path')){
+            $file_name = $request->type_data . '-' . $vehicle->name . '-' . $request->vehicle_year . '.' . $request->file('file_path')->getClientOriginalExtension();
+            $data['file_path'] = Storage::disk('hidden')->putFileAs('hidden', $request->file_path, $file_name);
         }
 
         //PartsCatalog::create($data);
-        PartsCatalog::create([
-            'title' => $data['title'],
-            'description' => $data['description'],
+        Dataset::create([
             'vehicle_id' => $data['vehicle_id'],
-            'file_path' => $data['file'],
+            'vehicle_year' => $data['vehicle_year'],
+            'type_data' => $data['type_data'],
+            'file_path' => $data['file_path'],
         ]);
 
         session()->flash('swal',[
@@ -67,13 +67,13 @@ class PartsCatalogController extends Controller
             'confirmButtonColor' => '#198754',
         ]);
 
-        return redirect()->route('parts-catalogs.index');
+        return redirect()->route('datasets.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(PartsCatalog $partsCatalog)
+    public function show(Dataset $dataset)
     {
         //
     }
@@ -81,7 +81,7 @@ class PartsCatalogController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PartsCatalog $partsCatalog)
+    public function edit(Dataset $dataset)
     {
         //
     }
@@ -89,13 +89,12 @@ class PartsCatalogController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PartsCatalog $partsCatalog)
+    public function update(Request $request, Dataset $dataset)
     {
         //
-
         if($request->hasFile('file')){
-            if($partsCatalog->file_path){
-                Storage::delete($partsCatalog->file_path);
+            if($dataset->file_path){
+                Storage::delete($dataset->file_path);
             }
             $data['file_path'] = Storage::disk('public')->put('parts', $request->file);
         }
@@ -104,9 +103,8 @@ class PartsCatalogController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PartsCatalog $partsCatalog)
+    public function destroy(Dataset $dataset)
     {
         //
     }
-
 }

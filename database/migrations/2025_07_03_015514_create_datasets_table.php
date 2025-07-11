@@ -11,20 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicles', function (Blueprint $table) {
+        Schema::create('datasets', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('code');
-            $table->string('serie_name')->nullable();
-            $table->foreignId('serie_id')
+            $table->foreignId('vehicle_id')
                 ->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            //$table->integer('year');
-            $table->string('image_path');
-            //$table->string('vehicledata_path');
-            //$table->string('enginedata_path');
-            //$table->string('servicemanual_path');
+            $table->integer('vehicle_year');
+            $table->string('type_data');
+            $table->string('file_path');
             $table->timestamps();
         });
     }
@@ -34,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicles');
+        Schema::dropIfExists('datasets');
     }
 };

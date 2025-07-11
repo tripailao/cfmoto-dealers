@@ -7,7 +7,7 @@
                 <flux:separator variant="subtle" />
             </div>
             <div class="basis-1/3 text-right">
-                @if ( auth()->user()->role >= 89 )
+                @if ( auth()->user()->hasanyrole('super-admin|admin'))
                 <flux:button
                     href="{{route('dealers.create')}}"
                     icon:trailing="plus-circle"
@@ -26,7 +26,7 @@
                 <th class="p-4">Ciudad</th>
                 <th class="p-4">Dirección</th>
                 <th class="p-4">Telefono</th>
-                @if ( auth()->user()->role >= 89 )
+                @if ( auth()->user()->hasanyrole('super-admin|admin'))
                     <th class="p-4">Editar</th>
                 @endif
                 </tr>

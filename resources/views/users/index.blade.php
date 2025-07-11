@@ -60,7 +60,7 @@
                 </div>
                 <div class="basis-1/12">
                     <flux:button
-                        href="#"
+                        href="{{route('users.edit', $user->id)}}"
                         size="sm"
                         icon:trailing="pencil-square"
                     >

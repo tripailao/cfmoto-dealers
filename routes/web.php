@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DealerController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PartsCatalogController;
+use App\Http\Controllers\DatasetController;
 use App\Http\Controllers\FilesController;
 use App\Http\Controllers\UserController;
 
@@ -50,10 +50,10 @@ Route::middleware(['auth'])->controller(VehicleController::class)->group(functio
     Route::get('/vehicles/{vehicle}', 'show')->name('vehicles.show');
 });
 
-Route::middleware(['auth'])->controller(PartsCatalogController::class)->group(function () {
-    Route::get('/parts-catalogs', 'index')->name('parts-catalogs.index');
-    Route::get('/parts-catalogs/create', 'create')->name('parts-catalogs.create');
-    Route::post('/parts-catalogs', 'store')->name('parts-catalogs.store');
+Route::middleware(['auth'])->controller(DatasetController::class)->group(function () {
+    Route::get('/datasets', 'index')->name('datasets.index');
+    Route::get('/datasets/create', 'create')->name('datasets.create');
+    Route::post('/datasets', 'store')->name('datasets.store');
     //Route::get('/partsCatalogs/{partsCatalog}/edit', 'edit')->name('partsCatalogs.edit');
     //Route::put('/partsCatalogs/{partsCatalog}', 'update')->name('partsCatalogs.update');
     //Route::get('storage/parts/{file_path}');

@@ -77,17 +77,39 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
         //
+        $roles = Role::all();
+        return view('users.edit', compact('user', 'roles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user, Role $role)
     {
         //
+        $data = $request->validate([
+            'name'      => 'required|max:255',
+            'lastname'  => 'required|max:255',
+            'email'     => 'required|email:rfc',
+            'password'  => 'required|max:255',
+            'role'      => 'required|exists:roles,name',
+        ]);
+
+        $user->syncRoles($data['role']);
+
+        $user->update($data);
+
+        session()->flash('swal',[
+            'icon' => 'success',
+            'title' => 'Usuario actualizado',
+            'text' => 'Se ha actualizado la información del usuario.',
+            'confirmButtonColor' => '#198754',
+        ]);
+
+        return redirect()->route('users.index');
     }
 
     /**

@@ -23,17 +23,28 @@
         <div class="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
         <form action="{{ url('/search')}}" type="get">
             <flux:field>
-                <flux:input icon="magnifying-glass" type="search" name="vehicle" placeholder="Buscar por modelo, codigo o año" />
+                <flux:input icon="magnifying-glass" type="search" name="vehicle" placeholder="Buscar por modelo comercial, serie o código de modelo" />
             </flux:field>
         </form>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="mb-3">
+            <span class="text-gray-500 font-bold">Series:</span>
+            <flux:badge color="cyan"><a href="/search?vehicle=MT">MT</a></flux:badge>
+            <flux:badge color="cyan"><a href="/search?vehicle=SR">SR</a></flux:badge>
+            <flux:badge color="cyan"><a href="/search?vehicle=NK">NK</a></flux:badge>
+            <flux:badge color="cyan"><a href="/search?vehicle=CL">CL</a></flux:badge>
+            <flux:badge color="cyan"><a href="/search?vehicle=CFORCE">CFORCE</a></flux:badge>
+            <flux:badge color="cyan"><a href="/search?vehicle=ZFORCE">ZFORCE</a></flux:badge>
+            <flux:badge color="cyan"><a href="/search?vehicle=YOUTH">YOUTH</a></flux:badge>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
             @foreach ($vehicles as $vehicle)
             <div class="p-4 border border-gray-100 rounded-lg shadow-md">
                 <a href="{{ route('vehicles.show', $vehicle->id) }}" class="text-cyan-500 hover:text-cyan-600">
                     <img src="{{Storage::url($vehicle->image_path)}}" class="mb-4" width="200">
-                    <h2><b>{{$vehicle->name}}</b> | {{$vehicle->year}}</h2>
+                    <h2><b>{{$vehicle->name}}</b></h2>
                 </a>
                 <p>{{$vehicle->code}}</p>
 

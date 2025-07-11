@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
+use App\Models\Dataset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -15,8 +16,8 @@ class VehicleController extends Controller
     public function index()
     {
         //
-        $data = Vehicle::orderBy('id', 'DESC')->get();
-        return view('vehicles.index', ['vehicles' => $data]);
+        $vehicles = Vehicle::orderBy('id', 'DESC')->get();
+        return view('vehicles.index', compact('vehicles'));
     }
 
     /**
@@ -39,7 +40,7 @@ class VehicleController extends Controller
             'name' => 'required|max:255',
             'code' => 'required|max:255',
             'serie_id' => 'required|max:255',
-            'year' => 'required|integer|max_digits:4',
+            /*'year' => 'required|integer|max_digits:4',*/
             'image' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
         ]);
 
@@ -48,7 +49,6 @@ class VehicleController extends Controller
 
         if($request->hasFile('image')){
             $file_name = $data['name'] . '-' . $data['code'] . '.' . $request->file('image')->getClientOriginalExtension();
-            //$data['image'] = Storage::disk('hidden')->put('hidden', $request->image);
             $data['image'] = Storage::disk('hidden')->putFileAs('hidden', $request->image, $file_name);
         }
 
@@ -57,9 +57,11 @@ class VehicleController extends Controller
             'code' => $data['code'],
             'serie_name' => $serieName->name,
             'serie_id' => $data['serie_id'],
-            'year' => $data['year'],
+            /*'year' => $data['year'],*/
             'image_path' => $data['image'],
         ]);
+
+        // crear el registro en la tabla de "catalog"
 
         session()->flash('swal',[
             'icon' => 'success',
@@ -77,7 +79,12 @@ class VehicleController extends Controller
     public function show(Vehicle $vehicle)
     {
         //
-        return view('vehicles.show', compact('vehicle'));
+        $datasets = Dataset::where('vehicle_id', $vehicle->id)->whereNot('type_data', 'Service Manual')->get();
+        $collected_engineData = $datasets->groupBy('vehicle_year');
+
+        $service_manuals = Dataset::where('vehicle_id', $vehicle->id)->where('type_data', 'Service Manual')->get();
+
+        return view('vehicles.show', compact('vehicle', 'collected_engineData', 'service_manuals'));
     }
 
     /**
@@ -100,7 +107,7 @@ class VehicleController extends Controller
             'name' => 'required|max:255',
             'code' => 'required|max:255',
             'serie_id' => 'required|max:255',
-            'year' => 'required|integer|max_digits:4',
+            //'year' => 'required|integer|max_digits:4',
         ]);
 
         $vehicle->update($data);
@@ -127,7 +134,7 @@ class VehicleController extends Controller
         $search_text = $_GET['vehicle'];
         $vehicles = Vehicle::where('name', 'LIKE', '%' . $search_text . '%')
                             ->orWhere('code', 'LIKE', '%' . $search_text . '%')
-                            ->orWhere('year', 'LIKE', '%' . $search_text . '%')->get();
+                            ->orWhere('serie_name', 'LIKE', '%' . $search_text . '%')->get();
 
         return view('vehicles.search', compact('vehicles'));
     }

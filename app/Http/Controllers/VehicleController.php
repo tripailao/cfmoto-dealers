@@ -16,7 +16,8 @@ class VehicleController extends Controller
     public function index()
     {
         //
-        $vehicles = Vehicle::orderBy('id', 'DESC')->get();
+        $vehicles = Vehicle::orderBy('code', 'ASC')
+            ->get();
         return view('vehicles.index', compact('vehicles'));
     }
 

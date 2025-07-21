@@ -37,7 +37,7 @@
                                     class="bg-cyan-500 hover:bg-cyan-600"
                                     href="{{Storage::url($item->file_path)}}"
                                 >
-                                    {{$item->type_data}}
+                                    {{$item->type_data}} (id: {{$item->id}})
                                 </flux:button>
                             @endforeach
                         <hr class="my-4">

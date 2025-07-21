@@ -17,7 +17,8 @@ class DatasetController extends Controller
     {
         //
         $vehicles = Vehicle::all();
-        $datasets = Dataset::all();
+        $datasets = Dataset::orderBy('vehicle_year', 'desc')
+            ->get();
         return view('datasets.index', compact('vehicles', 'datasets'));
     }
 
@@ -38,7 +39,7 @@ class DatasetController extends Controller
     {
         //
         $vehicle = Vehicle::find($request->vehicle_id);
-        $date = date('Ymj');
+        //$date = date('Ymj');
 
         $data = $request->validate([
             'vehicle_id' => 'required',
@@ -48,17 +49,30 @@ class DatasetController extends Controller
         ]);
 
         if($request->hasFile('file_path')){
-            $file_name = $request->type_data . '-' . $vehicle->name . '-' . $request->vehicle_year . '.' . $request->file('file_path')->getClientOriginalExtension();
-            $data['file_path'] = Storage::disk('hidden')->putFileAs('hidden', $request->file_path, $file_name);
+            //$request_typedata = preg_replace('/\s+/', '', $request->type_data);
+            //$file_name = $request_typedata . '-' . $vehicle->name . '-' . $request->vehicle_year . '.' . $request->file('file_path')->getClientOriginalExtension();
+            //$data['file_path'] = Storage::disk('hidden')->putFileAs('hidden', $request->file_path, $file_name);
+            $requestTypedata = preg_replace('/\s+/', '', $request->type_data);
+            $extension = $request->file('file_path')->getClientOriginalExtension();
+            $tempName = $requestTypedata . '-' . $vehicle->name . '-' . $request->vehicle_year . '.' . $extension;
+            $storedPath = $request->file('file_path')
+                ->storeAs('hidden', $tempName, 'hidden');
         }
 
-        //PartsCatalog::create($data);
-        Dataset::create([
+        $dataset = Dataset::create([
             'vehicle_id' => $data['vehicle_id'],
             'vehicle_year' => $data['vehicle_year'],
             'type_data' => $data['type_data'],
-            'file_path' => $data['file_path'],
+            'file_path' => $storedPath,
         ]);
+
+        $finalName = $requestTypedata . '-' . $vehicle->name . '-' . $data['vehicle_year'] . '-' . $dataset->id . '.' . $extension;
+        $oldPath = $storedPath;
+        $newPath = "hidden/$finalName";
+
+        Storage::disk('hidden')->move($oldPath, $newPath);
+
+        $dataset->update([ 'file_path' => $newPath ]);
 
         session()->flash('swal',[
             'icon' => 'success',
@@ -100,11 +114,36 @@ class DatasetController extends Controller
         }
     }
 
+    public function delete($id)
+    {
+        //
+        Dataset::find($id)->delete();
+
+        session()->flash('swal',[
+            'icon' => 'success',
+            'title' => 'Archivo eliminado',
+            'text' => 'Se eliminó el archivo.',
+            'confirmButtonColor' => '#198754',
+        ]);
+
+        return redirect()->route('datasets.index');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Dataset $dataset)
     {
         //
+        Dataset::find($id)->delete();
+
+        session()->flash('swal',[
+            'icon' => 'success',
+            'title' => 'Archivo eliminado',
+            'text' => 'Se eliminó el archivo.',
+            'confirmButtonColor' => '#198754',
+        ]);
+
+        return redirect()->route('datasets.index');
     }
 }

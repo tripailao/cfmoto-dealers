@@ -7,6 +7,7 @@ use App\Models\Dataset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class VehicleController extends Controller
 {
@@ -41,16 +42,15 @@ class VehicleController extends Controller
             'name' => 'required|max:255',
             'code' => 'required|max:255',
             'serie_id' => 'required|max:255',
-            /*'year' => 'required|integer|max_digits:4',*/
-            'image' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
+            'image_path' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
         ]);
 
         $serieId = $data['serie_id'];
         $serieName = DB::table('series')->where('id', $serieId)->first();
 
-        if($request->hasFile('image')){
-            $file_name = $data['name'] . '-' . $data['code'] . '.' . $request->file('image')->getClientOriginalExtension();
-            $data['image'] = Storage::disk('hidden')->putFileAs('hidden', $request->image, $file_name);
+        if($request->hasFile('image_path')){
+            $file_name = $data['name'] . '-' . $data['code'] . '.' . $request->file('image_path')->getClientOriginalExtension();
+            $data['image_path'] = Storage::disk('hidden')->putFileAs('hidden', $request->image_path, $file_name);
         }
 
         Vehicle::create([
@@ -58,8 +58,7 @@ class VehicleController extends Controller
             'code' => $data['code'],
             'serie_name' => $serieName->name,
             'serie_id' => $data['serie_id'],
-            /*'year' => $data['year'],*/
-            'image_path' => $data['image'],
+            'image_path' => $data['image_path'],
         ]);
 
         // crear el registro en la tabla de "catalog"
@@ -108,8 +107,20 @@ class VehicleController extends Controller
             'name' => 'required|max:255',
             'code' => 'required|max:255',
             'serie_id' => 'required|max:255',
-            //'year' => 'required|integer|max_digits:4',
+            'image_path' => 'image|mimes:jpg,jpeg,png,gif,webp|max:2048',
         ]);
+
+        if($request->hasFile('image_path')){
+
+            $destination = $vehicle->image_path;
+            if(Storage::exists($destination))
+            {
+                Storage::delete($destination);
+            }
+
+            $file_name = $data['name'] . '-' . $data['code'] . '.' . $request->file('image_path')->getClientOriginalExtension();
+            $data['image_path'] = Storage::disk('hidden')->putFileAs('hidden', $request->image_path, $file_name);
+        }
 
         $vehicle->update($data);
 

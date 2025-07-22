@@ -54,7 +54,9 @@ Route::middleware(['auth'])->controller(DatasetController::class)->group(functio
     Route::get('/datasets', 'index')->name('datasets.index');
     Route::get('/datasets/create', 'create')->name('datasets.create');
     Route::post('/datasets', 'store')->name('datasets.store');
-    Route::delete('/datasets/{datasets}', 'delete')->name('datasets.delete');
+    Route::delete('/datasets/{datasets}', 'trash')->name('datasets.trash');
+    Route::get('/datasets/restore/{datasets}', 'restore')->name('datasets.restore');
+    Route::post('/datasets/{datasets}', 'destroy')->name('datasets.destroy');
     //Route::get('/partsCatalogs/{partsCatalog}/edit', 'edit')->name('partsCatalogs.edit');
     //Route::put('/partsCatalogs/{partsCatalog}', 'update')->name('partsCatalogs.update');
     //Route::get('storage/parts/{file_path}');

@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <form action="{{route('vehicles.update', $vehicle)}}" method="POST" >
+        <form action="{{route('vehicles.update', $vehicle)}}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="flex flex-row gap-8">
@@ -43,13 +43,6 @@
                         <flux:error name="code" />
                     </flux:field>
                 </div>
-                {{-- <div class="mb-5">
-                    <flux:field>
-                        <flux:label>Año</flux:label>
-                        <flux:input type="number" name="year" value="{{old('year', $vehicle->year)}}" />
-                        <flux:error name="year" />
-                    </flux:field>
-                </div> --}}
             </div>
 
             <div class="basis-1/3">
@@ -59,8 +52,8 @@
                         @if(Storage::disk('hidden')->exists($vehicle->image_path))
                             <img src="{{Storage::url($vehicle->image_path)}}" class="mb-4" width="200">
                         @endif
-                        <flux:input type="file" name="image" accept="image/*" />
-                        <flux:error name="image" />
+                        <flux:input type="file" name="image_path" accept="image/*" />
+                        <flux:error name="image_path" />
                     </flux:field>
                 </div>
             </div>

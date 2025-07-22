@@ -45,53 +45,18 @@
                             <flux:error name="code" />
                         </flux:field>
                     </div>
-                    {{-- <div class="mb-5">
-                        <flux:field>
-                            <flux:label>Año</flux:label>
-                            <flux:input type="number" name="year" value="{{old('year') ?? date('Y')}}" />
-                            <flux:error name="year" />
-                        </flux:field>
-                    </div> --}}
                 </div>
                 <div class="basis-1/3">
                     <div class="shadow-lg bg-gray-100 p-4 mb-5 rounded-lg">
                         <flux:icon.photo class="size-24 text-gray-200"/>
                         <flux:field>
                             <flux:label>Imagen</flux:label>
-                            <flux:input type="file" name="image" accept="image/*" />
-                            <flux:error name="image" />
+                            <flux:input type="file" name="image_path" accept="image/*" />
+                            <flux:error name="image_path" />
                         </flux:field>
                     </div>
-
-                    {{-- <div class="shadow-lg bg-gray-100 p-4 mb-5 rounded-lg">
-                        <flux:field>
-                            <flux:label>Engine Data</flux:label>
-                            <flux:input type="file" name="enginedata" class="truncate" accept="application/pdf, application/vnd.ms-excel" />
-                            <flux:error name="image" />
-                        </flux:field>
-                    </div>
-
-                    <div class="shadow-lg bg-gray-100 p-4 mb-5 rounded-lg">
-                        <flux:field>
-                            <flux:label>Vehicle Data</flux:label>
-                            <flux:input type="file" name="vehicledata" class="truncate" accept="application/pdf, application/vnd.ms-excel" />
-                            <flux:error name="image" />
-                        </flux:field>
-                    </div>
-
-                    <div class="shadow-lg bg-gray-100 p-4 mb-5 rounded-lg">
-                        <flux:field>
-                            <flux:label>Manual de Servicio</flux:label>
-                            <flux:input type="file" name="servicemanual" class="truncate" accept="application/pdf, application/vnd.ms-excel" />
-                            <flux:error name="image" />
-                        </flux:field>
-                    </div> --}}
                 </div>
             </div>
-
-
-
-
             <flux:button variant="primary" type="submit">Agregar vehículo</flux:button>
         </form>
 

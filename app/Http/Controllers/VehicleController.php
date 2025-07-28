@@ -104,7 +104,6 @@ class VehicleController extends Controller
     {
         //
         //dd($request->image_path);
-
         $data = $request->validate([
             'name'          => 'required|max:255',
             'code'          => 'required|max:255',
@@ -126,7 +125,7 @@ class VehicleController extends Controller
             $file_name = $modName . '-' . $modCode . '.' . $request->file('image_path')->getClientOriginalExtension();
             $data['image_path'] = Storage::disk('vehicles')->putFileAs('vehicles', $request->image_path, $file_name);
         } else {
-            $image_path = $vehicle->image_path;
+            $data['image_path'] = $vehicle->image_path;
         }
 
         $vehicle->update([
@@ -134,7 +133,7 @@ class VehicleController extends Controller
             'code' => $modCode,
             'serie_name' => $serieName->name,
             'serie_id' => $data['serie_id'],
-            'image_path' => $image_path,
+            'image_path' => $data['image_path'],
         ]);
 
         session()->flash('swal',[

@@ -43,7 +43,12 @@
                     <flux:error name="phone" />
                 </flux:field>
             </div>
-            <flux:button variant="primary" type="submit">Guardar cambios</flux:button>
+            <flux:button
+                variant="primary"
+                class="bg-cyan-500 hover:bg-cyan-600"
+                type="submit">
+                Guardar cambios
+            </flux:button>
         </form>
 
     </div>

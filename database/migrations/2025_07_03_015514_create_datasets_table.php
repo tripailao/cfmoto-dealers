@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('type_data');
             $table->string('file_path');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

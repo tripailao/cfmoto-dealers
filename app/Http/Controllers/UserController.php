@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Dealer;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +20,7 @@ class UserController extends Controller
     {
         //
         $role = User::with('roles')->get();
-        $data = User::orderBy('id', 'DESC')->get();
+        $data = User::with('dealer')->orderBy('id', 'DESC')->get();
         return view('users.index', ['users' => $data], ['role' => $role]);
     }
 
@@ -29,7 +31,8 @@ class UserController extends Controller
     {
         //
         $roles = Role::all();
-        return view('users.create', ['roles' => $roles]);
+        $dealers = Dealer::all();
+        return view('users.create', compact('roles', 'dealers'));
     }
 
     /**
@@ -43,14 +46,19 @@ class UserController extends Controller
             'lastname'  => 'required|max:255',
             'email'     => 'required|email:rfc',
             'password'  => 'required|max:255',
+            'dealer'    => ['required', Rule::exists('dealers', 'id')->whereNull('deleted_at')],
             'role'      => 'required|exists:roles,name',
         ]);
+
+        // Protect POST from outside for soft deleted dealers
+        $dealer = Dealer::where('id', $request->dealer)->whereNull('deleted_at')->firstOrFail();
 
         $user = User::create([
             'name' => $data['name'],
             'lastname' => $data['lastname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'dealer_id' => $dealer->id,
 
         ]);
 
@@ -81,7 +89,8 @@ class UserController extends Controller
     {
         //
         $roles = Role::all();
-        return view('users.edit', compact('user', 'roles'));
+        $dealers = Dealer::all();
+        return view('users.edit', compact('user', 'roles', 'dealers'));
     }
 
     /**
@@ -95,6 +104,7 @@ class UserController extends Controller
             'lastname'  => 'required|max:255',
             'email'     => 'required|email:rfc',
             'password'  => 'required|max:255',
+            'dealer_id' => 'required',
             'role'      => 'required|exists:roles,name',
         ]);
 
@@ -115,8 +125,19 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
         //
+
+        User::findOrFail($user->id)->forceDelete();
+
+        session()->flash('swal',[
+            'icon' => 'success',
+            'title' => 'Usuario eliminado',
+            'text' => 'La información del usuario ha sido eliminada de la base de datos',
+            'confirmButtonColor' => '#198754',
+        ]);
+
+        return redirect()->route('users.index');
     }
 }

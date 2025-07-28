@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
-class RoleSeeder extends Seeder
+class RolesAndPermissionsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -21,16 +21,16 @@ class RoleSeeder extends Seeder
         $roleDealer = Role::create(['name' => 'dealer']);
         $roleService = Role::create(['name' => 'service']);
 
-        $permissionsDealer = [
-            'vehicles.index',
-            'vehicles.show',
-        ];
+        // $permissionsDealer = [
+        //     'vehicles.index',
+        //     'vehicles.show',
+        // ];
 
-        foreach ($permissionsDealer as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
-        }
+        // foreach ($permissionsDealer as $permission) {
+        //     Permission::firstOrCreate(['name' => $permission]);
+        // }
 
-        $roleDealer->syncPermissions($permissionsDealer);
+        // $roleDealer->syncPermissions($permissionsDealer);
 
     }
 }

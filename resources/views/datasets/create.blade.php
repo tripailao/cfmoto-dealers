@@ -56,7 +56,12 @@
                 </flux:field>
             </div>
 
-            <flux:button variant="primary" type="submit">Agregar nuevo catálogo</flux:button>
+            <flux:button
+                variant="primary"
+                class="bg-cyan-500 hover:bg-cyan-600"
+                type="submit">
+                Agregar nuevo catálogo
+            </flux:button>
         </form>
 
     </div>

@@ -57,7 +57,12 @@
                     </div>
                 </div>
             </div>
-            <flux:button variant="primary" type="submit">Agregar vehículo</flux:button>
+            <flux:button
+                variant="primary"
+                class="bg-cyan-500 hover:bg-cyan-600"
+                type="submit">
+                Agregar vehículo
+            </flux:button>
         </form>
 
     </div>

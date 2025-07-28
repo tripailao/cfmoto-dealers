@@ -49,7 +49,7 @@
                 <div class="shadow-lg bg-gray-100 p-4 mb-5 rounded-lg">
                     <flux:field>
                         <flux:label>Imagen</flux:label>
-                        @if(Storage::disk('hidden')->exists($vehicle->image_path))
+                        @if(Storage::disk('vehicles')->exists($vehicle->image_path))
                             <img src="{{Storage::url($vehicle->image_path)}}" class="mb-4" width="200">
                         @endif
                         <flux:input type="file" name="image_path" accept="image/*" />
@@ -58,7 +58,12 @@
                 </div>
             </div>
         </div>
-        <flux:button variant="primary" type="submit">Guardar cambios</flux:button>
+        <flux:button
+            variant="primary"
+            class="bg-cyan-500 hover:bg-cyan-600"
+            type="submit">
+            Guardar cambios
+        </flux:button>
         </form>
 
     </div>

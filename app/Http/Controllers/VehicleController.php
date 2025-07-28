@@ -45,23 +45,23 @@ class VehicleController extends Controller
             'image_path' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
         ]);
 
+        $modName = strtoupper(preg_replace('/\s+/', '', $request->name));
+        $modCode = strtoupper(preg_replace('/\s+/', '', $request->code));
         $serieId = $data['serie_id'];
         $serieName = DB::table('series')->where('id', $serieId)->first();
 
         if($request->hasFile('image_path')){
-            $file_name = $data['name'] . '-' . $data['code'] . '.' . $request->file('image_path')->getClientOriginalExtension();
-            $data['image_path'] = Storage::disk('hidden')->putFileAs('hidden', $request->image_path, $file_name);
+            $file_name = $modName . '-' . $modCode . '.' . $request->file('image_path')->getClientOriginalExtension();
+            $data['image_path'] = Storage::disk('vehicles')->putFileAs('vehicles', $request->image_path, $file_name);
         }
 
         Vehicle::create([
-            'name' => $data['name'],
-            'code' => $data['code'],
+            'name' => $modName,
+            'code' => $modCode,
             'serie_name' => $serieName->name,
             'serie_id' => $data['serie_id'],
             'image_path' => $data['image_path'],
         ]);
-
-        // crear el registro en la tabla de "catalog"
 
         session()->flash('swal',[
             'icon' => 'success',
@@ -103,26 +103,39 @@ class VehicleController extends Controller
     public function update(Request $request, Vehicle $vehicle)
     {
         //
+        //dd($request->image_path);
+
         $data = $request->validate([
-            'name' => 'required|max:255',
-            'code' => 'required|max:255',
-            'serie_id' => 'required|max:255',
-            'image_path' => 'image|mimes:jpg,jpeg,png,gif,webp|max:2048',
+            'name'          => 'required|max:255',
+            'code'          => 'required|max:255',
+            'serie_id'      => 'required|max:255',
+            'image_path'    => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
         ]);
 
+        $modName = strtoupper(preg_replace('/[.\s]+/', '', $request->name));
+        $modCode = strtoupper(preg_replace('/[.\s]+/', '', $request->code));
+        $serieId = $data['serie_id'];
+        $serieName = DB::table('series')->where('id', $serieId)->first();
+
         if($request->hasFile('image_path')){
-
             $destination = $vehicle->image_path;
-            if(Storage::exists($destination))
+            if(Storage::disk('vehicles')->exists($destination))
             {
-                Storage::delete($destination);
+                Storage::disk('vehicles')->delete($destination);
             }
-
-            $file_name = $data['name'] . '-' . $data['code'] . '.' . $request->file('image_path')->getClientOriginalExtension();
-            $data['image_path'] = Storage::disk('hidden')->putFileAs('hidden', $request->image_path, $file_name);
+            $file_name = $modName . '-' . $modCode . '.' . $request->file('image_path')->getClientOriginalExtension();
+            $data['image_path'] = Storage::disk('vehicles')->putFileAs('vehicles', $request->image_path, $file_name);
+        } else {
+            $image_path = $vehicle->image_path;
         }
 
-        $vehicle->update($data);
+        $vehicle->update([
+            'name' => $modName,
+            'code' => $modCode,
+            'serie_name' => $serieName->name,
+            'serie_id' => $data['serie_id'],
+            'image_path' => $image_path,
+        ]);
 
         session()->flash('swal',[
             'icon' => 'success',

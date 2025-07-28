@@ -40,6 +40,23 @@
                     <flux:error name="password" />
                 </flux:field>
             </div>
+
+            <div class="mb-5">
+                <flux:field>
+                    <flux:label>Asociar a dealer o servicio</flux:label>
+                    <flux:select name="dealer" placeholder="Seleccione un dealer o servicio...">
+                        @foreach ($dealers as $dealer)
+                            @if ( old('dealer') == $dealer->name )
+                                <flux:select.option value="{{ old('dealer')}}" selected>{{$dealer->name}}</flux:select.option>
+                            @else
+                                <flux:select.option value="{{ $dealer->id }}">{{$dealer->name}}</flux:select.option>
+                            @endif)
+                        @endforeach
+                    </flux:select>
+                    <flux:error name="dealer" />
+                </flux:field>
+            </div>
+
             <div class="mb-5">
                 <flux:field>
                     <flux:label>Rol de usuario</flux:label>
@@ -56,7 +73,12 @@
                 </flux:field>
             </div>
 
-            <flux:button variant="primary" type="submit">Crear usuario</flux:button>
+            <flux:button
+                variant="primary"
+                class="bg-cyan-500 hover:bg-cyan-600"
+                type="submit">
+                Crear usuario
+            </flux:button>
         </form>
 
     </div>

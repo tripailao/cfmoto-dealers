@@ -2,23 +2,17 @@
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
         <div class="relative w-full flex flex-row">
             <div class="basis-2/3">
-                <flux:heading size="xl" level="1">{{ __('Dealers de CFMOTO en Chile')}}</flux:heading>
-                <flux:subheading size="lg">{{ __('Listado de distribuidores') }}</flux:subheading>
+                <flux:heading size="xl" level="1">{{ __('Papelera: Dealers')}}</flux:heading>
+                <flux:subheading size="lg">{{ __('Distribuidores o servicios archivados') }}</flux:subheading>
+                <flux:separator variant="subtle" />
             </div>
             <div class="basis-1/3 text-right">
                 @if ( auth()->user()->hasanyrole('super-admin|admin'))
                 <flux:button
-                    href="{{ route('dealers.trashed' ) }}"
-                    icon:trailing="trash"
+                    href="{{route('dealers.index')}}"
+                    icon:trailing="list-bullet"
                 >
-                    Papelera
-                </flux:button>
-
-                <flux:button
-                    href="{{route('dealers.create')}}"
-                    icon:trailing="plus-circle"
-                >
-                    Agregar dealer
+                    Ver publicados
                 </flux:button>
                 @endif
             </div>
@@ -26,6 +20,12 @@
         <div class="my-3">
             <flux:separator variant="subtle" />
         </div>
+
+        @if($dealers->count() == 0 )
+            <div class="p-3 rounded bg-amber-100 text-amber-700 border border-amber-300 shadow">
+                <p><flux:icon.information-circle class="inline" /> No hay elementos en la papelera</p>
+            </div>
+        @else
 
         <div class="border border-gray-100 rounded-lg shadow-xl">
         <table class="table table-auto w-full text-left ">
@@ -35,11 +35,10 @@
                 <th class="p-4">Ciudad</th>
                 <th class="p-4">Dirección</th>
                 <th class="p-4">Telefono</th>
-                @if ( auth()->user()->hasanyrole('super-admin|admin'))
-                    <th class="p-4">Editar</th>
-                @endif
+                <th class="p-4">Editar</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach ($dealers as $dealer)
                 <tr>
@@ -49,24 +48,28 @@
                     <td class="px-4 py-3">{{$dealer->phone}}</td>
                     <td class="px-4 py-3">
                     <div class="flex flex-row gap-2">
-                        <flux:button
-                        href="{{route('dealers.edit', $dealer->id)}}"
-                        variant="primary"
-                        class="bg-cyan-500 hover:bg-cyan-600"
-                        size="sm"
-                        icon:trailing="pencil-square"
-                        >
-                            Editar
-                        </flux:button>
-                        <form action="{{ route('dealers.trash', $dealer->id) }}" method="POST">
+                        <form action="{{ route('dealers.restore', $dealer->id) }}" method="POST">
+                            @csrf
+                            <flux:button
+                                as="button"
+                                type="submit"
+                                variant="primary"
+                                class="border-green-600 bg-green-500 hover:bg-green-600"
+                                icon="arrow-uturn-left"
+                                size="sm">
+                            Restaurar
+                            </flux:button>
+                        </form>
+                        <form action="{{ route('dealers.destroy', $dealer->id) }}" method="POST">
                             @csrf
                             <flux:button
                                 as="button"
                                 type="submit"
                                 variant="primary"
                                 class="border-red-600 bg-red-500 hover:bg-red-600"
-                                icon="trash"
+                                icon="x-mark"
                                 size="sm">
+                            Eliminar
                             </flux:button>
                         </form>
                     </div>
@@ -76,6 +79,6 @@
             </tbody>
         </table>
         </div>
-
+        @endif
     </div>
 </x-layouts.app>

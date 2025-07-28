@@ -20,11 +20,16 @@ class DatasetController extends Controller
         $vehicles = Vehicle::all();
         $datasets = Dataset::orderBy('vehicle_year', 'desc')
             ->get();
+        $countTrashed = Dataset::onlyTrashed()->count();
 
-        if($request->has('view_deleted')) {
-            $datasets = Dataset::onlyTrashed()->get();
+        if($countTrashed > 0)
+        {
+            $badgeTrashed = '<span class="px-2 py-1 text-xs rounded-lg bg-red-500 text-white">'. $countTrashed .'</span>';
+        } else {
+            $badgeTrashed = '';
         }
-        return view('datasets.index', compact('vehicles', 'datasets'));
+
+        return view('datasets.index', compact('vehicles', 'datasets', 'badgeTrashed'));
     }
 
     /**
@@ -59,9 +64,9 @@ class DatasetController extends Controller
             //$data['file_path'] = Storage::disk('hidden')->putFileAs('hidden', $request->file_path, $file_name);
             $requestTypedata = preg_replace('/\s+/', '', $request->type_data);
             $extension = $request->file('file_path')->getClientOriginalExtension();
-            $tempName = $requestTypedata . '-' . $vehicle->name . '-' . $request->vehicle_year . '.' . $extension;
+            $tempName = $requestTypedata . '-' . $vehicle->name . '-' . $vehicle->code . '-' . $request->vehicle_year . '.' . $extension;
             $storedPath = $request->file('file_path')
-                ->storeAs('hidden', $tempName, 'hidden');
+                ->storeAs('datasets', $tempName, 'datasets');
         }
 
         $dataset = Dataset::create([
@@ -71,11 +76,11 @@ class DatasetController extends Controller
             'file_path' => $storedPath,
         ]);
 
-        $finalName = $requestTypedata . '-' . $vehicle->name . '-' . $data['vehicle_year'] . '-' . $dataset->id . '.' . $extension;
+        $finalName = $requestTypedata . '-' . $vehicle->name . '-' . $vehicle->code . '-' . $data['vehicle_year'] . '-' . $dataset->id . '.' . $extension;
         $oldPath = $storedPath;
-        $newPath = "hidden/$finalName";
+        $newPath = "datasets/$finalName";
 
-        Storage::disk('hidden')->move($oldPath, $newPath);
+        Storage::disk('datasets')->move($oldPath, $newPath);
 
         $dataset->update([ 'file_path' => $newPath ]);
 
@@ -134,6 +139,19 @@ class DatasetController extends Controller
         return redirect()->route('datasets.index');
     }
 
+    /**
+     * Restore a trashed dealer.
+     */
+
+    public function trashed(Dataset $dataset)
+    {
+        $datasets = Dataset::onlyTrashed()->get();
+        return view('datasets.trashed', compact('datasets'));
+    }
+
+    /**
+     * Restore a trashed datset.
+     */
     public function restore($id)
     {
         //
@@ -149,15 +167,16 @@ class DatasetController extends Controller
         return redirect()->route('datasets.index');
     }
 
+
     public function destroy($id)
     {
         //
         $dataset = Dataset::withTrashed()->find($id);
 
         $filePath = $dataset->file_path;
-        if(Storage::exists($filePath))
+        if(Storage::disk('datasets')->exists($filePath))
         {
-            Storage::delete($filePath);
+            Storage::disk('datasets')->delete($filePath);
         }
 
         $dataset->forceDelete();

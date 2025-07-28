@@ -20,11 +20,7 @@ return new class extends Migration
                 ->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            //$table->integer('year');
             $table->string('image_path');
-            //$table->string('vehicledata_path');
-            //$table->string('enginedata_path');
-            //$table->string('servicemanual_path');
             $table->timestamps();
         });
     }

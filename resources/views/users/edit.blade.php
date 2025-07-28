@@ -45,6 +45,22 @@
 
             <div class="mb-5">
                 <flux:field>
+                    <flux:label>Asociar a dealer o servicio</flux:label>
+                    <flux:select name="dealer_id" placeholder="Seleccione un dealer o servicio...">
+                        @foreach ($dealers as $dealer)
+                            @if ( old('dealer_id', $user->dealer_id ) ==  $dealer->id)
+                                <flux:select.option value="{{ old('dealer_id', $user->dealer_id)}}" selected>{{$dealer->name}}</flux:select.option>
+                            @else
+                                <flux:select.option value="{{ $dealer->id }}">{{$dealer->name}}</flux:select.option>
+                            @endif)
+                        @endforeach
+                    </flux:select>
+                    <flux:error name="dealer_id" />
+                </flux:field>
+            </div>
+
+            <div class="mb-5">
+                <flux:field>
                     <flux:label>Rol de usuario</flux:label>
                     <flux:select name="role" placeholder="Seleccione un rol...">
                         @foreach ($roles as $role)
@@ -59,7 +75,12 @@
                 </flux:field>
             </div>
 
-            <flux:button variant="primary" type="submit">Actualizar usuario</flux:button>
+            <flux:button
+                variant="primary"
+                class="bg-cyan-500 hover:bg-cyan-600"
+                type="submit">
+                Actualizar usuario
+            </flux:button>
         </form>
 
     </div>

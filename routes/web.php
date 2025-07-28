@@ -32,6 +32,7 @@ Route::get('/search', [VehicleController::class, 'search']);
 //Route::get('/home', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('home');
 
 Route::resource('users', UserController::class)->names('users');
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
 Route::middleware(['auth'])->controller(DealerController::class)->group(function () {
     Route::get('/dealers', 'index')->name('dealers.index');
@@ -39,6 +40,10 @@ Route::middleware(['auth'])->controller(DealerController::class)->group(function
     Route::post('/dealers', 'store')->name('dealers.store');
     Route::get('/dealers/{dealer}/edit', 'edit')->name('dealers.edit');
     Route::put('/dealers/{dealer}', 'update')->name('dealers.update');
+    Route::post('/dealers/{dealer}', 'trash')->name('dealers.trash');
+    Route::get('/dealers/trashed', 'trashed')->name('dealers.trashed');
+    Route::post('/dealers/{id}/restore', 'restore')->name('dealers.restore');
+    Route::post('/dealers/{id}/destroy', 'destroy')->name('dealers.destroy');
 });
 
 Route::middleware(['auth'])->controller(VehicleController::class)->group(function () {
@@ -55,11 +60,10 @@ Route::middleware(['auth'])->controller(DatasetController::class)->group(functio
     Route::get('/datasets/create', 'create')->name('datasets.create');
     Route::post('/datasets', 'store')->name('datasets.store');
     Route::delete('/datasets/{datasets}', 'trash')->name('datasets.trash');
-    Route::get('/datasets/restore/{datasets}', 'restore')->name('datasets.restore');
+    Route::get('/datasets/trashed', 'trashed')->name('datasets.trashed');
+    Route::post('/datasets/{id}/restore', 'restore')->name('datasets.restore');
     Route::post('/datasets/{datasets}', 'destroy')->name('datasets.destroy');
-    //Route::get('/partsCatalogs/{partsCatalog}/edit', 'edit')->name('partsCatalogs.edit');
-    //Route::put('/partsCatalogs/{partsCatalog}', 'update')->name('partsCatalogs.update');
-    //Route::get('storage/parts/{file_path}');
+
 });
 
 Route::get('storage/hidden/{file_path}', FilesController::class)->middleware('auth');

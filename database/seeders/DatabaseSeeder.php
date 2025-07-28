@@ -16,18 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             DealerSeeder::class,
-            SerieSeeder::class,
-            RoleSeeder::class,
+            RolesAndPermissionsSeeder::class,
             UserSeeder::class,
+            SerieSeeder::class,
         ]);
-
-        User::factory()->create([
-            'name' => 'Matias',
-            'lastname' => 'Tripailao',
-            'email' => 'm@t.cl',
-            'password' => bcrypt('demo1234'),
-        ])->assignRole('super-admin');
-
 
     }
 }

@@ -16,10 +16,10 @@
                 </flux:button>
                 @else
                 <flux:button
-                    href="{{ route('datasets.index', ['view_deleted' => 'DeletedRecords'] ) }}"
+                    href="{{ route('datasets.trashed') }}"
                     icon:trailing="trash"
                 >
-                    Papelera
+                    Papelera {!!$badgeTrashed!!}
                 </flux:button>
                 @endif
                 <flux:button
@@ -46,6 +46,7 @@
                     <th class="p-4"></th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach ($datasets as $dataset)
                 <tr>

@@ -55,7 +55,7 @@ return [
         ],
 
         'vehicles' => [
-            'driver' => 'local',
+            'driver' => 's3',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage/vehicles',
             'visibility' => 'private',

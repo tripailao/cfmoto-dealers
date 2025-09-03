@@ -47,13 +47,6 @@ return [
             'report' => false,
         ],
 
-        'hidden' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage/hidden',
-            'visibility' => 'private',
-        ],
-
         'datasets' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
